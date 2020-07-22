@@ -1,0 +1,19 @@
+name: check
+
+on:
+  push:
+    branches:
+      - 'master'
+      - '*'
+  pull_request:
+
+jobs:
+  drupal-9:
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: Setup project for testing.
+        run: COMPOSER_MEMORY_LIMIT=-1 composer create-project govcms/govcms8-project govcms-site
+      -
+        name: Run Check
+        run: cd govcms-site && composer why-not -t drupal/core:~9
