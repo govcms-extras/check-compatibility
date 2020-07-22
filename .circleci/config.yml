@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: composer:1
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: Prepare the environment
+          command: |
+            apk add --no-cache zip libzip-dev libpng-dev
+            docker-php-ext-install -j4 zip gd
+            composer --version
+      - run:
+          name: Create GovCMS project
+          command: |
+            COMPOSER_MEMORY_LIMIT=-1 composer create-project govcms/govcms8-project govcms-site
+      - run:
+          name: Check Drupal 9 support
+          command: |
+            cd ~/app/govcms-site
+            composer why-not -t drupal/core:~9
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
