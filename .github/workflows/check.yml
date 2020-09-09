@@ -23,9 +23,6 @@ jobs:
       # For more information, see the act project.
       # - https://github.com/nektos/act
       -
-        name: Install dependencies
-        run: sudo apt-get update -y && apt-get -y install composer
-      -
         name: Clean-up
         run: rm -rf govcms-site || true
       -
