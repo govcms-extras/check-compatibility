@@ -1,6 +1,10 @@
 name: check
 
 on:
+  schedule:
+    - cron: "0 0 * * *"
+    - cron: "0 0 * * *"
+    - cron: "0 0 * * *"
   push:
     branches:
       - 'master'
@@ -11,9 +15,28 @@ jobs:
   drupal-9:
     runs-on: ubuntu-18.04
     steps:
+      # To support the local tool `act` without their
+      # recommended container image, we install the tools
+      # directly on the build container running, and
+      # perform a pre-run cleanup.
+      #
+      # For more information, see the act project.
+      # - https://github.com/nektos/act
+      -
+        name: Install dependencies
+        run: apt-get update -y && apt-get -y install composer
+      -
+        name: Clean-up
+        run: rm -rf govcms-site || true
       -
         name: Setup project for testing.
         run: COMPOSER_MEMORY_LIMIT=-1 composer create-project govcms/govcms8-project govcms-site
       -
+        name: Install upgrade-status
+        run: COMPOSER_MEMORY_LIMIT=-1 composer require drupal/upgrade_status:*
+      -
         name: Run Check
-        run: cd govcms-site && composer why-not -t drupal/core:~9
+        run: cd govcms-site && composer why-not -t drupal/core:~9 || true
+      -
+        name: Run Upgrade Status
+        run: drush upgrade_status:analyze --all --ignore-contrib || true
