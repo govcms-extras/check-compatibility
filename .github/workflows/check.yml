@@ -28,6 +28,9 @@ jobs:
         name: Setup project for testing.
         run: COMPOSER_MEMORY_LIMIT=-1 composer create-project govcms/govcms8-project govcms-site
       -
+        name: Install drush
+        run: cd govcms-site && composer require drush/drush:^10
+      -
         name: Install upgrade_status
         run: cd govcms-site && composer require drupal/upgrade_status:*
       -
@@ -35,4 +38,4 @@ jobs:
         run: cd govcms-site && composer why-not -t drupal/core:~9 || true
       -
         name: Run Upgrade Status
-        run: drush upgrade_status:analyze --all --ignore-contrib || true
+        run: cd govcms-site && drush upgrade_status:analyze --all --ignore-contrib || true
