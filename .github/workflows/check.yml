@@ -29,7 +29,10 @@ jobs:
         run: COMPOSER_MEMORY_LIMIT=-1 composer create-project govcms/govcms8-project govcms-site
       -
         name: Install drush
-        run: sudo apt-get install drush
+        run: cd govcms-site && composer require drush/drush:*
+      -
+        name: Find drush
+        run: find drush || true
       -
         name: Install upgrade_status
         run: cd govcms-site && composer require drupal/upgrade_status:*
