@@ -1,3 +1,3 @@
 # check-compatibility
 
-Check GovCMS Compatibility Issues
+Check GovCMS distribution compatibility issues
